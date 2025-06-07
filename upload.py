@@ -32,7 +32,7 @@ CUSTOM_DOMAIN_FILE = INSTALL_DIR / "custom_domain.txt" # 存储最终使用的�
 
 # ====== 全局可配置参数（可直接在此处修改） ======
 USER_NAME = "kaze"         # 用户名
-UUID = "cff399cc-0a6a-4738-b98a-ba9b8d1bd98c"                     # UUID，留空则自动生成
+UUID = "1ab8f716-c4f9-48ed-bf70-0d43710c0aa5"                     # UUID，留空则自动生成
 PORT = 41999                   # Vmess端口，留空或0则自动生成
 DOMAIN = "streamlit.2550603.xyz"                   # 域名，留空则自动获取
 CF_TOKEN = "eyJhIjoiZDk5MjMwZGEzZTI2MzU3ZTAwMWQzYjE0OGY1OGYwNzgiLCJ0IjoiMjQ4ODU1NWEtZWM3Yi00N2Y1LWI5YTMtOTc5ZjEzYmY4ZWUxIiwicyI6Ill6YzVZbVF6TVRVdFl6ZGpaUzAwT0RGaExUbGtNRFF0TTJWak1qVTNNamszWVRreCJ9"                 # Cloudflare Token，留空则用Quick Tunnel
