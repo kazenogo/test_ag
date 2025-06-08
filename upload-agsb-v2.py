@@ -31,11 +31,11 @@ DEBUG_LOG = INSTALL_DIR / "python_debug.log"
 CUSTOM_DOMAIN_FILE = INSTALL_DIR / "custom_domain.txt" # 存储最终使用的域名
 
 # ====== 全局可配置参数（可直接在此处修改） ======
-USER_NAME = "kazenogo"         # 用户名
-UUID = "cff399cc-0a6a-4738-b98a-ba9b8d1bd98c"                     # UUID，留空则自动生成
-PORT = 40999                   # Vmess端口，留空或0则自动生成
-DOMAIN = "streamlit.2550603.xyz"                   # 域名，留空则自动获取
-CF_TOKEN = "eyJhIjoiZDk5MjMwZGEzZTI2MzU3ZTAwMWQzYjE0OGY1OGYwNzgiLCJ0IjoiMjQ4ODU1NWEtZWM3Yi00N2Y1LWI5YTMtOTc5ZjEzYmY4ZWUxIiwicyI6Ill6YzVZbVF6TVRVdFl6ZGpaUzAwT0RGaExUbGtNRFF0TTJWak1qVTNNamszWVRreCJ9"                 # Cloudflare Token，留空则用Quick Tunnel
+USER_NAME = "kazenogot"         # 用户名
+UUID = "1c02be3b-ee83-48e9-8008-622a6d2295b8"                     # UUID，留空则自动生成
+PORT =      "12878"              # Vmess端口，留空或0则自动生成
+DOMAIN = "zehost.2550603.xyz"                   # 域名，留空则自动获取
+CF_TOKEN = "eyJhIjoiZDk5MjMwZGEzZTI2MzU3ZTAwMWQzYjE0OGY1OGYwNzgiLCJ0IjoiMWM1ZWQ2NWMtNjcyZi00ZGJkLWEyZDQtYTRlYmZmMGVjNjMzIiwicyI6Ill6QmpOalZpWkRBdE16ZGtZaTAwTlRZeExUazVZall0T1dZek4ySm1NR0UyTmpFeSJ9"                 # Cloudflare Token，留空则用Quick Tunnel
 # =========================================
 
 # 添加命令行参数解析
@@ -801,88 +801,6 @@ def get_tunnel_domain():
     
     write_debug_log("获取tunnel域名超时。")
     return None
-
-# 上传订阅到API服务器
-UPLOAD_API = "https://file.zmkk.fun/api/upload"  # 文件上传API
-
-def upload_to_api(subscription_content, user_name):
-    """
-    将订阅内容上传到API服务器，文件名为用户名.txt
-    :param subscription_content: 订阅内容
-    :param user_name: 用户名
-    :return: 成功返回True，失败返回False
-    """
-    try:
-        import requests
-    except ImportError:
-        print("检测到未安装requests库，正在尝试安装...")
-        try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
-            import requests
-            print("requests库安装成功")
-        except Exception as e:
-            print(f"安装requests库失败: {e}")
-            print("请手动执行: pip install requests")
-            return False
-    try:
-        write_debug_log("开始上传订阅内容到API服务器")
-        # 文件名直接用用户名
-        file_name = f"{user_name}.txt"
-        temp_file = INSTALL_DIR / file_name
-        # 写入临时文件
-        try:
-            with open(str(temp_file), 'w', encoding='utf-8') as f:
-                f.write(subscription_content)
-        except Exception as e:
-            write_debug_log(f"创建临时文件失败: {e}")
-            print(f"创建临时文件失败: {e}")
-            return False
-        # 构建multipart表单数据
-        try:
-            files = {
-                'file': (file_name, open(str(temp_file), 'rb'))
-            }
-            write_debug_log(f"正在上传文件到API: {UPLOAD_API}")
-            response = requests.post(UPLOAD_API, files=files)
-            files['file'][1].close()
-            if os.path.exists(str(temp_file)):
-                os.remove(str(temp_file))
-            if response.status_code == 200:
-                try:
-                    result = response.json()
-                    if result.get('success') or result.get('url'):
-                        url = result.get('url', '')
-                        write_debug_log(f"上传成功，URL: {url}")
-                        print(f"\033[36m│ \033[32m订阅已成功上传，URL: {url}\033[0m")
-                        url_file = INSTALL_DIR / "subscription_url.txt"
-                        with open(str(url_file), 'w') as f:
-                            f.write(url)
-                        return True
-                    else:
-                        write_debug_log(f"API返回错误: {result}")
-                        print(f"API返回错误: {result}")
-                        return False
-                except Exception as e:
-                    write_debug_log(f"解析API响应失败: {e}")
-                    print(f"解析API响应失败: {e}")
-                    return False
-            else:
-                write_debug_log(f"上传失败，状态码: {response.status_code}")
-                print(f"上传失败，状态码: {response.status_code}")
-                return False
-        except Exception as e:
-            write_debug_log(f"上传过程中出错: {e}")
-            print(f"上传过程中出错: {e}")
-            if os.path.exists(str(temp_file)):
-                try:
-                    os.remove(str(temp_file))
-                except:
-                    pass
-            return False
-    except Exception as e:
-        write_debug_log(f"上传订阅到API服务器失败: {e}")
-        print(f"上传订阅到API服务器失败: {e}")
-        return False
 
 # 主函数
 def main():
